@@ -1,0 +1,28 @@
+<html>
+	<head>
+		<script type="text/javascript"><!--
+			myCnt = 100;
+			myTim = 0;
+			 
+			myTim = setInterval ( "myTimer()", 1000 );
+			 
+			function myTimer(){
+				myCnt = myCnt - 1;
+				document.getElementById( "countdown" ).innerHTML = myCnt;
+				if ( myCnt == 0 ){
+				clearInterval( myTim );
+				alert( "終了！" );
+			}
+		}
+		// --></script>
+	</head>
+
+	<body>
+		<form name="myForm">
+			<div align="center">
+				<SPAN ID="countdown"></SPAN><BR><BR>
+				<input type="button" value="閉じる" onclick="window.close()">
+			</div>
+		</form>
+	</body>
+</html>
