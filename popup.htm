@@ -1,19 +1,21 @@
 <html>
 	<head>
 		<script type="text/javascript"><!--
-			myCnt = 100;
-			myTim = 0;
+			count = 100;
 			 
-			myTim = setInterval ( "myTimer()", 1000 );
+			intervalId = setInterval ( "myTimer()", 1000 );
 			 
 			function myTimer(){
-				myCnt = myCnt - 1;
-				document.getElementById( "countdown" ).innerHTML = myCnt;
-				if ( myCnt == 0 ){
-				clearInterval( myTim );
-				alert( "終了！" );
+				count--;
+				var min = parseInt(count / 60);
+				var sec = count % 60;
+				var dispStr = ("0"+min).slice(-2) +"：" + ("0"+sec).slice(-2);
+				document.getElementById( "countdown" ).innerHTML = dispStr;
+				if ( count == 0 ){
+					clearInterval( intervalId );
+					alert( "終了！" );
+				}
 			}
-		}
 		// --></script>
 	</head>
 
