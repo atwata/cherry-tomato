@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  h1= title
+  if username
+    p Welcome, #{username}
+  else
+    p name:
+    form(method='get', action'/')
+      input(type='text', name='username')
+      input(type='submit', value='OK')
+

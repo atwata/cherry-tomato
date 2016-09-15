@@ -1,10 +1,13 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
 router.get('/', function(req, res, next) {
-  //res.render('index', { title: 'Express' });
   res.render('hello', { title: 'Hello', content: 'Hello World' });
+});
+
+router.get('/form', function(req, res, next) {
+  var username = req.param('username');
+  res.render('form', { title: 'form sample', username: username });
 });
 
 module.exports = router;
