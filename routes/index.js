@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 router.get('/', function(req, res, next) {
-  res.render('hello', { title: 'Hello', content: 'Hello World' });
+  res.render('index', { title: 'Hello', content: 'Hello Express' });
 });
 
 router.get('/form', function(req, res, next) {
