@@ -11,21 +11,18 @@ router.get('/form', function(req, res, next) {
 });
 
 router.get('/mongo', function(req, res, next) {
-  var db;
-  var mongoClient = require('mongodb').MongoClient;
+
+  var MongoClient = require('mongodb').MongoClient,
+    test = require('assert');
+  // Connection url
   var url = 'mongodb://localhost:27017/test';
-  var fish;
-
-  mongoClient.connect(url, function(err, mongodb){
-    console.log(err);
-    console.log(mongodb);
-    console.log('connect server');
-    fish = mongodb.collection('fish');
-    console.log(fish.find());
+  // Connect using MongoClient
+  MongoClient.connect(url, function(err, db) {
+    // Get an additional db
+    db.close();
   });
-
   
-  res.render('mongo', { title: 'mongo sample', content: fish});
+  res.render('mongo', { title: 'mongo sample', content: 'content sample'});
 });
 
 module.exports = router;
