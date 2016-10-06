@@ -14,22 +14,21 @@ router.get('/mongo', function(req, res, next) {
 
   var MongoClient = require('mongodb').MongoClient,
     test = require('assert');
+
   // Connection url
-  var url = 'mongodb://localhost:27017/test';
+  var url = 'mongodb://localhost:27017/sample';
+
   // Connect using MongoClient
   MongoClient.connect(url, function(err, db) {
-    // Use the admin database for the operation
-    var adminDb = db.admin();
-    // List all the available databases
-    adminDb.listDatabases(function(err, dbs) {
-      test.equal(null, err);
-      test.ok(dbs.databases.length > 0);
-      console.log(dbs);
+    var col = db.collection('sample');
+    col.find({}).toArray(function(err, items){
+      test.equal(null,err);
+      console.log(items);
+      res.render('mongo', { title: 'mongo sample', content: JSON.stringify(items)});
       db.close();
     });
   });
   
-  res.render('mongo', { title: 'mongo sample', content: 'content sample'});
 });
 
 module.exports = router;
