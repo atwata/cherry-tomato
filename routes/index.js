@@ -39,12 +39,24 @@ router.get('/done', function(req, res, next) {
   // Connection url
   var url = 'mongodb://localhost:27017/sample';
 
+  var now = new Date();
+  var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
   // Connect using MongoClient
   MongoClient.connect(url, function(err, db) {
     var col = db.collection('sample');
-    col.find({}).toArray(function(err, items){
+    col.find({'date':today}).toArray(function(err, items){
       test.equal(null,err);
       console.log(items);
+      if(items.length > 0){
+        //update
+        items[0]["count"]++;
+        console.log(items["count"]);
+        col.update({'date':today},items[0]);
+      }else{
+        //insert
+        col.insert({'date':today, 'count':1});
+      }
       res.render('done', { title: 'done sample', content: JSON.stringify(items)});
       db.close();
     });
