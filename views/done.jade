@@ -3,3 +3,8 @@ extends layout
 block content
   h1= title
   p= content
+  table(border="1")
+    - for (i = 0; i < items.length; i++)
+      tr
+        td=items[i]['date']
+        td=items[i]['count']
