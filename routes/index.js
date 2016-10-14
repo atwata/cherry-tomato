@@ -45,14 +45,15 @@ router.get('/done', function(req, res, next) {
   // Connect using MongoClient
   MongoClient.connect(url, function(err, db) {
     var col = db.collection('sample');
-    col.find({'date':today}).toArray(function(err, today){
+    col.find({'date':today}).toArray(function(err, todayRecs){
       test.equal(null,err);
-      console.log(today);
-      if(today.length > 0){
+      console.log(todayRecs);
+      if(todayRecs.length > 0){
+        todayRec = todayRecs[0];
         //update
-        today[0]["count"]++;
-        console.log(today["count"]);
-        col.update({'date':today},today[0]);
+        todayRec["count"]++;
+        console.log(todayRec["count"]);
+        col.update({'date':today},todayRec);
       }else{
         //insert
         col.insert({'date':today, 'count':1});
