@@ -5,6 +5,12 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Hello', content: 'Hello Express' });
 });
 
+router.get('/date', function(req, res, next) {
+  var moment = require('moment');
+  res.locals.moment = moment;
+  res.render('date', { title: 'moment format', now: new Date });
+});
+
 router.get('/form', function(req, res, next) {
   var username = req.param('username');
   res.render('form', { title: 'form sample', username: username });
@@ -32,6 +38,9 @@ router.get('/mongo', function(req, res, next) {
 });
 
 router.get('/done', function(req, res, next) {
+
+  var moment = require('moment');
+  res.locals.moment = moment;
 
   var MongoClient = require('mongodb').MongoClient,
     test = require('assert');

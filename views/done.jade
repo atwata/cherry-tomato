@@ -7,5 +7,5 @@ block content
   table(border="1")
     - for (i = 0; i < items.length; i++)
       tr
-        td=items[i]['date']
-        td=items[i]['count']
+        td= moment(items[i]['date']).format('YYYY/MM/DD')
+        td= items[i]['count']
