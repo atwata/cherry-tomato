@@ -3,7 +3,7 @@ extends layout
 block content
   h1= title
   p= content
-  button(id='send-button' onclick='hello()') Send
+  button(id='send-button' onclick='send()') Send
   table(border="1")
     - for (i = 0; i < items.length; i++)
       tr

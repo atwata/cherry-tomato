@@ -76,5 +76,33 @@ router.get('/done', function(req, res, next) {
   
 });
 
+// postデータを扱う
+//router.use(express.bodyDecoder());
+
+router.post('/done', function(req, res, next) {
+
+  var moment = require('moment');
+  res.locals.moment = moment;
+
+  var MongoClient = require('mongodb').MongoClient,
+    test = require('assert');
+
+  // Connection url
+  var url = 'mongodb://localhost:27017/sample';
+
+  var now = new Date();
+  var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  // Connect using MongoClient
+  MongoClient.connect(url, function(err, db) {
+    var col = db.collection('sample');
+    col.insert({'date':today, 'task':req.body.task});
+  });
+
+  res.redirect("done");
+
+});
+
+
 
 module.exports = router;
