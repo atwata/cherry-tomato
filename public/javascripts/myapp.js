@@ -13,6 +13,7 @@ function start(){
 }
 
 $(function() {
+
   $('#modal-example').on('show.bs.modal', function(event) {
       var count = 20;
       intervalId = setInterval(function(){
@@ -27,4 +28,9 @@ $(function() {
         }
       },1000);
   });
+
+  $('#modal-example').on('hide.bs.modal', function(event) {
+      clearInterval( intervalId );
+  });
+
 });
