@@ -55,18 +55,6 @@ router.get('/done', function(req, res, next) {
   MongoClient.connect(url, function(err, db) {
     var col = db.collection('sample');
     col.find({'date':today}).toArray(function(err, todayRecs){
-      test.equal(null,err);
-      console.log(todayRecs);
-      if(todayRecs.length > 0){
-        todayRec = todayRecs[0];
-        //update
-        todayRec["count"]++;
-        console.log(todayRec["count"]);
-        col.update({'date':today},todayRec);
-      }else{
-        //insert
-        col.insert({'date':today, 'count':1});
-      }
       col.find({}).toArray(function(err, items){
         res.render('done', { title: 'done sample', content: JSON.stringify(items), items: items});
         db.close();
@@ -91,12 +79,12 @@ router.post('/done', function(req, res, next) {
   var url = 'mongodb://localhost:27017/sample';
 
   var now = new Date();
-  var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  //var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
   // Connect using MongoClient
   MongoClient.connect(url, function(err, db) {
     var col = db.collection('sample');
-    col.insert({'date':today, 'task':req.body.task});
+    col.insert({'date':now, 'task':req.body.task});
   });
 
   res.redirect("done");
