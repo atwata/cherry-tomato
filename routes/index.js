@@ -27,7 +27,7 @@ router.get('/mongo', function(req, res, next) {
   // Connect using MongoClient
   MongoClient.connect(url, function(err, db) {
     var col = db.collection('sample');
-    col.find({}).toArray(function(err, items){
+    col.find({}).sort({'date':-1}).toArray(function(err, items){
       test.equal(null,err);
       console.log(items);
       res.render('mongo', { title: 'mongo sample', content: JSON.stringify(items)});
@@ -54,11 +54,9 @@ router.get('/done', function(req, res, next) {
   // Connect using MongoClient
   MongoClient.connect(url, function(err, db) {
     var col = db.collection('sample');
-    col.find({'date':today}).toArray(function(err, todayRecs){
-      col.find({}).toArray(function(err, items){
-        res.render('done', { title: 'done sample', content: JSON.stringify(items), items: items});
-        db.close();
-      });
+    col.find({}).sort({'date':-1}).toArray(function(err, items){
+      res.render('done', { title: 'cherry tomato', content: JSON.stringify(items), items: items});
+      db.close();
     });
   });
   
@@ -90,7 +88,5 @@ router.post('/done', function(req, res, next) {
   res.redirect("done");
 
 });
-
-
 
 module.exports = router;

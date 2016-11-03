@@ -16,12 +16,12 @@ $(function() {
   $('#modal-example').on('show.bs.modal', function(event) {
       var count = 20;
       intervalId = setInterval(function(){
-        count--;
         var min = parseInt(count / 60);
         var sec = count % 60;
         var dispStr = ("0"+min).slice(-2) +"：" + ("0"+sec).slice(-2);
         $('#modal-message').text(dispStr);
-        if ( count == 0 ){
+        count--;
+        if ( count < 0 ){
           clearInterval( intervalId );
           start();
         }

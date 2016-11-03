@@ -2,17 +2,24 @@ extends layout
 
 block content
   h1= title
-  code= content
-  input#task(type='text', class='form-control' autocomplete='off')
-  button(id='start-button' class='btn btn-default btn-sm' onclick='start()') Start
-  button(id='modal-button' class='btn btn-primary btn-sm' data-toggle="modal" data-target="#modal-example") Modal
-  table(class='table table-striped')
-    - for (i = 0; i < items.length; i++)
-      tr
-        td= moment(items[i]['date']).format('YYYY/MM/DD HH:mm')
-        td= items[i]['task']
 
-  div(class='modal fade' id='modal-example' tabindex="-1")
+  secton.container
+    div.row
+      div.col-xs-6.col-xs-offset-2
+        input#task(type='text', class='form-control' autocomplete='off')
+      div.col-xs-2
+        button(id='modal-button' class='btn btn-primary btn-sm' data-toggle="modal" data-target="#modal-example") Modal
+
+  secton.container
+    div.row
+      div.col-xs-12
+        table(class='table table-striped')
+          - for (i = 0; i < items.length; i++)
+            tr
+              td= moment(items[i]['date']).format('YYYY/MM/DD HH:mm')
+              td= items[i]['task']
+
+  div(class='modal' id='modal-example' tabindex="-1")
     div(class="modal-dialog" role="document")
       div(class="modal-content")
         div(class='modal-header')
@@ -21,3 +28,5 @@ block content
           h1(id='modal-message')
         div(class='modal-footer')
           button(type='button' class="btn btn-default" data-dismiss="modal") close
+
+  code= content
