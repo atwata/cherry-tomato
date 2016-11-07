@@ -89,4 +89,24 @@ router.post('/done', function(req, res, next) {
 
 });
 
+router.post('/remove', function(req, res, next) {
+
+  var ObjId = require('mongodb').ObjectID;
+  var MongoClient = require('mongodb').MongoClient;
+
+  // Connection url
+  var url = 'mongodb://localhost:27017/sample';
+
+  // Connect using MongoClient
+  MongoClient.connect(url, function(err, db) {
+    var col = db.collection('sample');
+    col.remove({_id: ObjId(req.body.id)});
+    console.log(req.body.id);
+  });
+
+  res.redirect("done");
+
+});
+
+
 module.exports = router;
