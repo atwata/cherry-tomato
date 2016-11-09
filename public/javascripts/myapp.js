@@ -76,3 +76,15 @@ $(function() {
   });
 
 });
+
+
+$(function() {
+  $('#tabs a[href^="#panel"]').on('click', function(){
+    $("#tabs .panel").hide();
+    $("#tabs .active").removeClass('active');
+    $(this.hash).fadeIn();
+    $(this).parent().addClass('active');
+    return false;
+  });
+  $('#tabs a[href^="#panel"]:eq(0)').trigger('click');
+})

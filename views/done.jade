@@ -10,30 +10,31 @@ block content
       div.col-xs-2
         button(id='modal-button' class='btn btn-primary btn-sm' data-toggle="modal" data-target="#modal-example") Start
 
-  ul(class='nav nav-tabs')
-    li(role='presentation' class='active')
-      a(href='#') Today &nbsp;
-        span(class='badge') 10
-    li(role='presentation')
-      a(href='#') 11/8 &nbsp;
-        span(class='badge') 17
-    li(role='presentation')
-      a(href='#') 11/7 &nbsp;
-        span(class='badge') 4
+  div(id='tabs')
+    ul(class='nav nav-tabs')
+      li(role='presentation' class='active')
+        a(href='#panel1') Today &nbsp;
+          span(class='badge') 10
+      li(role='presentation')
+        a(href='#panel2') 11/8 &nbsp;
+          span(class='badge') 17
+      li(role='presentation')
+        a(href='#panel3') 11/7 &nbsp;
+          span(class='badge') 4
 
-
-  secton.container
-    div.row
-      div.col-xs-12
-        table(class='table table-striped table-condensed')
-          - for (var i = 0; i < items.length; i++)
-            tr
-              td
-                small= moment(items[i]['date']).format('YYYY/MM/DD HH:mm')
-              td
-                small= items[i]['task']
-              td(align='right')
-                button(type='button' class='btn btn-default btn-xs' onClick="deleteTask('#{items[i]['_id']}')") ×
+    div(id='panel1' class='panel')
+      secton.container
+        div.row
+          div.col-xs-12
+            table(class='table table-striped table-condensed')
+              - for (var i = 0; i < items.length; i++)
+                tr
+                  td
+                    small= moment(items[i]['date']).format('YYYY/MM/DD HH:mm')
+                  td
+                    small= items[i]['task']
+                  td(align='right')
+                    button(type='button' class='btn btn-default btn-xs' onClick="deleteTask('#{items[i]['_id']}')") ×
 
   div(class='modal' id='modal-example' tabindex="-1")
     div(class="modal-dialog" role="document")
