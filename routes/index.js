@@ -38,7 +38,6 @@ router.get('/mongo', function(req, res, next) {
 });
 
 router.get('/done', function(req, res, next) {
-
   var moment = require('moment');
   res.locals.moment = moment;
 
@@ -48,14 +47,38 @@ router.get('/done', function(req, res, next) {
   // Connection url
   var url = 'mongodb://localhost:27017/sample';
 
-  var now = new Date();
-  var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  var day = moment();
+  var contents = [];
+  for(var i=0; i < 7; i++){
+    var key = day.format('MM/DD');
+    contents[i] = {date:key, items:[]};
+    day = day.subtract(1, 'days');
+  }
 
   // Connect using MongoClient
   MongoClient.connect(url, function(err, db) {
     var col = db.collection('sample');
-    col.find({}).sort({'date':-1}).toArray(function(err, items){
-      res.render('done', { title: 'cherry tomato', content: JSON.stringify(items), items: items});
+    col.find({date:{$gte: moment().subtract(7,'days').toDate()}}).sort({'date':-1}).toArray(function(err, items){
+      // 日付をキーにしたitemの配列
+      var temp = {};
+      for(var i in items){
+        var key = moment(items[i].date).format('MM/DD');
+        if(temp[key] == null){
+          temp[key] = [];
+        }
+        temp[key].push(items[i]);
+      }
+
+      console.log(items.length);
+
+      for(var i in contents){
+        items = temp[contents[i].date];
+        if(items != null){
+          contents[i].items = temp[contents[i].date];
+        }
+      }
+
+      res.render('done', { title: 'cherry tomato', content: JSON.stringify(items), contents: contents});
       db.close();
     });
   });
