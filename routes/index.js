@@ -131,5 +131,53 @@ router.post('/remove', function(req, res, next) {
 
 });
 
+router.post('/tokensignin', function(req, res, next) {
+
+  var idtoken = req.body.idtoken;
+  console.log(idtoken);
+
+  var request = require('request');
+
+  var options = {
+    url: 'https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=' + idtoken,
+    json: true
+  };
+
+  request.get(options, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      console.log(body);
+      if(body.iss != 'accounts.google.com'){
+        console.log('iss error: '+ body.iss);
+        return false;
+      }
+      if(body.aud != '750425634534-oum88tm03c6o1ohqptidgf0deqm8kjtn.apps.googleusercontent.com'){
+        console.log('aud error: '+ body.aud);
+        return false;
+      }
+      console.log("check ok");
+
+    }else{
+      console.log('error: '+ response.statusCode);
+    }
+  });
+
+/*
+  var ObjId = require('mongodb').ObjectID;
+  var MongoClient = require('mongodb').MongoClient;
+
+  // Connection url
+  var url = 'mongodb://localhost:27017/sample';
+
+  // Connect using MongoClient
+  MongoClient.connect(url, function(err, db) {
+    var col = db.collection('sample');
+    col.remove({_id: ObjId(req.body.id)});
+    console.log(req.body.id);
+  });
+
+  res.redirect("done");
+*/
+});
+
 
 module.exports = router;
