@@ -38,6 +38,16 @@ router.get('/mongo', function(req, res, next) {
 });
 
 router.get('/done', function(req, res, next) {
+
+  console.log(req.session);
+
+  if(!req.session.user){
+    res.render('done', { title: 'cherry tomato', content: [], contents: [], user: null });
+    return;
+  }
+
+  user = req.session.user;
+
   var moment = require('moment');
   res.locals.moment = moment;
 
@@ -58,7 +68,7 @@ router.get('/done', function(req, res, next) {
   // Connect using MongoClient
   MongoClient.connect(url, function(err, db) {
     var col = db.collection('sample');
-    col.find({date:{$gte: moment().subtract(7,'days').toDate()}}).sort({'date':-1}).toArray(function(err, items){
+    col.find({iss: user.iss, userid: user.id, date:{$gte: moment().subtract(7,'days').toDate()}}).sort({'date':-1}).toArray(function(err, items){
       // 日付をキーにしたitemの配列
       var temp = {};
       for(var i in items){
@@ -78,7 +88,7 @@ router.get('/done', function(req, res, next) {
         }
       }
 
-      res.render('done', { title: 'cherry tomato', content: JSON.stringify(items), contents: contents});
+      res.render('done', { title: 'cherry tomato', content: JSON.stringify(items), contents: contents, user: user });
       db.close();
     });
   });
@@ -88,7 +98,16 @@ router.get('/done', function(req, res, next) {
 // postデータを扱う
 //router.use(express.bodyDecoder());
 
-router.post('/done', function(req, res, next) {
+router.post('/add', function(req, res, next) {
+
+  if(!req.session.user){
+    console.log('returned /add.  not logged in');
+    res.redirect("done");
+    return;
+  }
+
+  var userid = req.session.user.id;
+  var useriss = req.session.user.iss;
 
   var moment = require('moment');
   res.locals.moment = moment;
@@ -105,7 +124,7 @@ router.post('/done', function(req, res, next) {
   // Connect using MongoClient
   MongoClient.connect(url, function(err, db) {
     var col = db.collection('sample');
-    col.insert({'date':now, 'task':req.body.task});
+    col.insert({'iss': useriss, 'userid':userid, 'date':now, 'task':req.body.task});
   });
 
   res.redirect("done");
@@ -113,6 +132,12 @@ router.post('/done', function(req, res, next) {
 });
 
 router.post('/remove', function(req, res, next) {
+
+  if(!req.session.user){
+    console.log('returned /remove.  not logged in');
+    res.redirect("done");
+    return;
+  }
 
   var ObjId = require('mongodb').ObjectID;
   var MongoClient = require('mongodb').MongoClient;
@@ -154,12 +179,16 @@ router.post('/tokensignin', function(req, res, next) {
         console.log('aud error: '+ body.aud);
         return false;
       }
+      req.session.user = {iss: body.iss, id: body.sub, name: body.given_name, picture: body.picture};
       console.log("check ok");
-
+      console.log(req.session);
+      // ajsx requestは手動saveが必要
+      req.session.save(function(){ res.send('{}') });
     }else{
       console.log('error: '+ response.statusCode);
     }
   });
+
 
 /*
   var ObjId = require('mongodb').ObjectID;

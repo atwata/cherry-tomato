@@ -1,6 +1,6 @@
 function insertTask(){
   var form = document.createElement('form');
-  form.setAttribute('action','done');
+  form.setAttribute('action','add');
   form.setAttribute('method','post');
   document.body.appendChild(form);
   var input = document.createElement('input');
@@ -45,7 +45,7 @@ var timer = {
       count--;
       if ( count < 0 ){
         clearInterval( intervalId );
-        timer.rest(30);
+        timer.rest(5);
       }
     },1000);
   },
@@ -93,3 +93,40 @@ $(function() {
   });
   $('#tabs a[href^="#panel"]:eq(0)').trigger('click');
 })
+
+// Google OAuth
+function signOut() {
+  var auth2 = gapi.auth2.getAuthInstance();
+  auth2.signOut().then(function () {
+    console.log('User signed out.');
+   });
+}
+
+function onSignIn(googleUser) {
+  var id_token = googleUser.getAuthResponse().id_token;
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', 'http://app.atwata.com/cherry-tomato/tokensignin');
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhr.onload = function() {
+    console.log('Signed in as: ' + xhr.responseText);
+    window.location.href = "http://app.atwata.com/cherry-tomato/done";
+  };
+  xhr.send('idtoken=' + id_token);
+}
+
+function onSignIn2(googleUser){
+  var id_token = googleUser.getAuthResponse().id_token;
+  var form = document.createElement('form');
+  form.setAttribute('action','tokensignin');
+  form.setAttribute('method','post');
+  document.body.appendChild(form);
+  var input = document.createElement('input');
+  input.setAttribute('type', 'hidden');
+  input.setAttribute('name', 'idtoken');
+  input.setAttribute('value',idtoken);
+  form.appendChild(input);
+  form.submit();
+}
+
+
+
