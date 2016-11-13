@@ -6,7 +6,7 @@ block content
   secton.container
     div.row
       div.col-xs-6.col-xs-offset-2
-        input#task(type='text', class='form-control' autocomplete='off')
+        input#task(type='text', class='form-control')
       div.col-xs-2
         button(id='modal-button' class='btn btn-primary btn-sm' data-toggle="modal" data-target="#modal-example") Start
 
@@ -43,7 +43,9 @@ block content
     div(class="modal-dialog" role="document")
       div(class="modal-content")
         div(class='modal-header')
-          p(id='modal-title')
+          img(id="modal-img" width="24" src='')
+          span &nbsp;&nbsp;
+          span(id='modal-title')
           button(type='button' class="close" data-dismiss="modal")
         div(class='modal-body')
           h1(id='modal-message')

@@ -1,6 +1,6 @@
 function insertTask(){
   var form = document.createElement('form');
-  form.setAttribute('action','/done');
+  form.setAttribute('action','done');
   form.setAttribute('method','post');
   document.body.appendChild(form);
   var input = document.createElement('input');
@@ -14,7 +14,7 @@ function insertTask(){
 
 function deleteTask(id){
   var form = document.createElement('form');
-  form.setAttribute('action','/remove');
+  form.setAttribute('action','remove');
   form.setAttribute('method','post');
   document.body.appendChild(form);
   var input = document.createElement('input');
@@ -30,9 +30,13 @@ var timer = {
   setTitle: function(title){
     $('#modal-title').text(title);
   },
+  setImg: function(img){
+    $('#modal-img').attr("src", img);
+  },
   start: function(count){
     var task = document.getElementById("task");
     timer.setTitle(task.value);
+    timer.setImg('images/honoo_hi_fire.png');
     intervalId = setInterval(function(){
       var min = parseInt(count / 60);
       var sec = count % 60;
@@ -41,12 +45,13 @@ var timer = {
       count--;
       if ( count < 0 ){
         clearInterval( intervalId );
-        timer.rest(300);
+        timer.rest(30);
       }
     },1000);
   },
   rest: function(count){
     timer.setTitle('Interval');
+    timer.setImg('images/drink_chabashira.png');
     intervalId = setInterval(function(){
       var min = parseInt(count / 60);
       var sec = count % 60;
@@ -65,7 +70,7 @@ $(function() {
 
   $('#modal-example').on('show.bs.modal', function(event) {
 //    timer.count = 1500; //25min
-    timer.start(1500)
+    timer.start(15)
 //    timer.count = 300; //5min
 //    timer.start()
 //    start();
