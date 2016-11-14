@@ -45,7 +45,7 @@ var timer = {
       count--;
       if ( count < 0 ){
         clearInterval( intervalId );
-        timer.rest(5);
+        timer.rest(300);
       }
     },1000);
   },
@@ -70,7 +70,7 @@ $(function() {
 
   $('#modal-example').on('show.bs.modal', function(event) {
 //    timer.count = 1500; //25min
-    timer.start(15)
+    timer.start(1500)
 //    timer.count = 300; //5min
 //    timer.start()
 //    start();
@@ -92,14 +92,15 @@ $(function() {
     return false;
   });
   $('#tabs a[href^="#panel"]:eq(0)').trigger('click');
-})
+});
 
 // Google OAuth
 function signOut() {
   var auth2 = gapi.auth2.getAuthInstance();
   auth2.signOut().then(function () {
     console.log('User signed out.');
-   });
+    window.location.href = "http://app.atwata.com/cherry-tomato/done";
+  });
 }
 
 function onSignIn(googleUser) {

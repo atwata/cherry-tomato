@@ -24,7 +24,7 @@ block content
       div.col-xs-2
         if user
           div(align="right")
-            a(href="signout") Logout
+            a(href="#" onclick="signOut();") Logout
         else
           &nbsp;
 

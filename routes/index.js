@@ -208,5 +208,10 @@ router.post('/tokensignin', function(req, res, next) {
 */
 });
 
+router.get('/signout', function(req, res, next) {
+  req.session.user = null;
+  res.render('signout', {});
+});
+
 
 module.exports = router;
