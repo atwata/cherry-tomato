@@ -40,6 +40,7 @@ var timer = {
     var task = document.getElementById("task");
     timer.setTitle(task.value);
     timer.setImg('images/honoo_hi_fire.png');
+
     intervalId = setInterval(function(){
       var min = parseInt(count / 60);
       var sec = count % 60;
@@ -55,6 +56,9 @@ var timer = {
   rest: function(count){
     timer.setTitle('Interval');
     timer.setImg('images/drink_chabashira.png');
+    $('#modal-img').jrumble();
+    $('#modal-img').trigger('startRumble');
+
     intervalId = setInterval(function(){
       var min = parseInt(count / 60);
       var sec = count % 60;
