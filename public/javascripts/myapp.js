@@ -13,6 +13,9 @@ function insertTask(){
 }
 
 function deleteTask(id){
+  if(confirm("本当に削除しますか？") == false) {
+    return false;
+  }
   var form = document.createElement('form');
   form.setAttribute('action','remove');
   form.setAttribute('method','post');
@@ -82,7 +85,13 @@ $(function() {
 
 });
 
+function startAgain(taskValue){
+  var task = document.getElementById("task");
+  task.value = taskValue;
+  $('#modal-button').click();
+}
 
+// tab
 $(function() {
   $('#tabs a[href^="#panel"]').on('click', function(){
     $("#tabs .panel").hide();
