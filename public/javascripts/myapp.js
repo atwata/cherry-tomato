@@ -49,7 +49,7 @@ var timer = {
       count--;
       if ( count < 0 ){
         clearInterval( intervalId );
-        timer.rest(300);
+        timer.rest(3);
       }
     },1000);
   },
@@ -77,7 +77,7 @@ $(function() {
 
   $('#modal-example').on('show.bs.modal', function(event) {
 //    timer.count = 1500; //25min
-    timer.start(1500)
+    timer.start(15)
 //    timer.count = 300; //5min
 //    timer.start()
 //    start();
@@ -112,7 +112,7 @@ function signOut() {
   var auth2 = gapi.auth2.getAuthInstance();
   auth2.signOut().then(function () {
     console.log('User signed out.');
-    window.location.href = "http://app.atwata.com/cherry-tomato/done";
+    window.location.href = "http://app.atwata.com/cherry-tomato/";
   });
 }
 
@@ -123,7 +123,7 @@ function onSignIn(googleUser) {
   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
   xhr.onload = function() {
     console.log('Signed in as: ' + xhr.responseText);
-    window.location.href = "http://app.atwata.com/cherry-tomato/done";
+    window.location.href = "http://app.atwata.com/cherry-tomato/";
   };
   xhr.send('idtoken=' + id_token);
 }

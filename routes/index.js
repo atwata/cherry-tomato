@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Hello', content: 'Hello Express' });
+router.get('/hello', function(req, res, next) {
+  res.render('hello', { title: 'Hello', content: 'Hello Express' });
 });
 
 router.get('/date', function(req, res, next) {
@@ -37,12 +37,12 @@ router.get('/mongo', function(req, res, next) {
   
 });
 
-router.get('/done', function(req, res, next) {
+router.get('/', function(req, res, next) {
 
   console.log(req.session);
 
   if(!req.session.user){
-    res.render('done', { title: 'cherry tomato', content: [], contents: [], user: null });
+    res.render('index', { title: 'cherry tomato', content: [], contents: [], user: null });
     return;
   }
 
@@ -88,7 +88,7 @@ router.get('/done', function(req, res, next) {
         }
       }
 
-      res.render('done', { title: 'cherry tomato', content: JSON.stringify(items), contents: contents, user: user });
+      res.render('index', { title: 'cherry tomato', content: JSON.stringify(items), contents: contents, user: user });
       db.close();
     });
   });
@@ -102,7 +102,7 @@ router.post('/add', function(req, res, next) {
 
   if(!req.session.user){
     console.log('returned /add.  not logged in');
-    res.redirect("done");
+    res.redirect("./");
     return;
   }
 
@@ -119,7 +119,6 @@ router.post('/add', function(req, res, next) {
   var url = 'mongodb://localhost:27017/sample';
 
   var now = new Date();
-  //var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
   // Connect using MongoClient
   MongoClient.connect(url, function(err, db) {
@@ -127,7 +126,7 @@ router.post('/add', function(req, res, next) {
     col.insert({'iss': useriss, 'userid':userid, 'date':now, 'task':req.body.task});
   });
 
-  res.redirect("done");
+  res.redirect("./");
 
 });
 
@@ -135,7 +134,7 @@ router.post('/remove', function(req, res, next) {
 
   if(!req.session.user){
     console.log('returned /remove.  not logged in');
-    res.redirect("done");
+    res.redirect("./");
     return;
   }
 
@@ -152,7 +151,7 @@ router.post('/remove', function(req, res, next) {
     console.log(req.body.id);
   });
 
-  res.redirect("done");
+  res.redirect("./");
 
 });
 
@@ -188,24 +187,6 @@ router.post('/tokensignin', function(req, res, next) {
       console.log('error: '+ response.statusCode);
     }
   });
-
-
-/*
-  var ObjId = require('mongodb').ObjectID;
-  var MongoClient = require('mongodb').MongoClient;
-
-  // Connection url
-  var url = 'mongodb://localhost:27017/sample';
-
-  // Connect using MongoClient
-  MongoClient.connect(url, function(err, db) {
-    var col = db.collection('sample');
-    col.remove({_id: ObjId(req.body.id)});
-    console.log(req.body.id);
-  });
-
-  res.redirect("done");
-*/
 });
 
 router.get('/signout', function(req, res, next) {

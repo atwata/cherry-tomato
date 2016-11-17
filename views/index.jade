@@ -1,12 +1,89 @@
 extends layout
 
+block head_meta
+  meta(name="google-signin-scope" content="profile email")
+  meta(name="google-signin-client_id" content="750425634534-oum88tm03c6o1ohqptidgf0deqm8kjtn.apps.googleusercontent.com")
+
+block head_js
+  script(src="https://apis.google.com/js/platform.js" async defer)
+
 block content
-  h1= title
-  p= content
-  a(href="form", target="_blank") form sample
-  br
-  a(href="date", target="_blank") moment format
-  br
-  a(href="mongo", target="_blank") mongo
-  br
-  a(href="done", target="_blank") done
+
+  secton.container
+    div.row
+      div.col-xs-6.col-xs-offset-1
+        h1= title
+      div.col-xs-3
+        div(align="right")
+          if user
+            img(width="24" src="#{user.picture}")
+            span &nbsp;&nbsp;
+            span #{user.name}
+          else
+            p not login
+      div.col-xs-2
+        if user
+          div(align="right")
+            a(href="signout") Logout
+        else
+          &nbsp;
+
+  div &nbsp;
+
+  secton.container
+    div.row
+      div.col-xs-6.col-xs-offset-2
+        input#task(type='text', class='form-control')
+      div.col-xs-2
+        button(id='modal-button' class='btn btn-primary btn-sm' data-toggle="modal" data-target="#modal-example") Start
+
+  if user
+    div(id='tabs')
+      ul(class='nav nav-tabs')
+        - for (var i = 0; i < contents.length; i++){
+        - var id = (i + 1);
+        - var panelId = 'panel' + id;
+          li(role='presentation')
+            a(href='##{panelId}') #{contents[i].date} &nbsp;
+              span(class='badge') #{contents[i].items.length}
+        - }
+
+      - for (var i = 0; i < contents.length; i++){
+      - var id = (i + 1);
+      - var panelId = 'panel' + id;
+        div(id='#{panelId}' class='panel')
+          secton.container
+            div.row
+              div.col-xs-12
+                table(class='table table-striped table-condensed')
+                  - items = contents[i].items;
+                  - for (var j = 0; j < items.length; j++)
+                    tr
+                      td
+                        small= moment(items[j]['date']).format('YYYY/MM/DD HH:mm')
+                      td
+                        small= items[j]['task']
+                      td(align='right')
+                        button(type='button' class='btn btn-default btn-xs' title="再実行" onClick="startAgain('#{items[j]['task']}')")
+                          <span class="glyphicon glyphicon-play"></span>
+                        &nbsp;
+                        button(type='button' class='btn btn-default btn-xs' title="削除" onClick="deleteTask('#{items[j]['_id']}')")
+                          <span class="glyphicon glyphicon-remove"></span>
+
+      - }
+  else
+    div(align="center" class="g-signin2" data-onsuccess="onSignIn" data-theme="dark")
+
+  div(class='modal' id='modal-example' data-backdrop="static" tabindex="-1")
+    div(class="modal-dialog" role="document")
+      div(class="modal-content")
+        div(class='modal-header')
+          img(id="modal-img" width="24" src='')
+          span &nbsp;&nbsp;
+          span(id='modal-title')
+          button(type='button' class="close" data-dismiss="modal")
+        div(class='modal-body')
+          h1(id='modal-message')
+        div(class='modal-footer')
+          button(type='button' class="btn btn-default" data-dismiss="modal") close
+
