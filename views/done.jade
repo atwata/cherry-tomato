@@ -64,10 +64,10 @@ block content
                       td
                         small= items[j]['task']
                       td(align='right')
-                        button(type='button' class='btn btn-default btn-xs' onClick="startAgain('#{items[j]['task']}')")
+                        button(type='button' class='btn btn-default btn-xs' title="再実行" onClick="startAgain('#{items[j]['task']}')")
                           <span class="glyphicon glyphicon-play"></span>
                         &nbsp;
-                        button(type='button' class='btn btn-default btn-xs' onClick="deleteTask('#{items[j]['_id']}')")
+                        button(type='button' class='btn btn-default btn-xs' title="削除" onClick="deleteTask('#{items[j]['_id']}')")
                           <span class="glyphicon glyphicon-remove"></span>
 
       - }
