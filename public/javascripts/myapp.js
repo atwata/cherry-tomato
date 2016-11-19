@@ -31,41 +31,44 @@ function deleteTask(id){
 
 var timer = {
   setTitle: function(title){
-    $('#modal-title').text(title);
+    $('#modal-timer-title').text(title);
   },
   setImg: function(img){
     $('#modal-img').attr("src", img);
   },
-  start: function(count){
+  start: function(smin, rmin){
+    var scount = smin * 60;
+    var rcount = rmin * 60;
+    console.log(scount);
     var task = document.getElementById("task");
     timer.setTitle(task.value);
     timer.setImg('images/honoo_hi_fire.png');
 
     intervalId = setInterval(function(){
-      var min = parseInt(count / 60);
-      var sec = count % 60;
+      var min = parseInt(scount / 60);
+      var sec = scount % 60;
       var dispStr = ("0"+min).slice(-2) +"：" + ("0"+sec).slice(-2);
       $('#modal-message').text(dispStr);
-      count--;
-      if ( count < 0 ){
+      scount--;
+      if ( scount < 0 ){
         clearInterval( intervalId );
-        timer.rest(3);
+        timer.rest(rcount);
       }
     },1000);
   },
-  rest: function(count){
+  rest: function(rcount){
     timer.setTitle('Interval');
     timer.setImg('images/drink_chabashira.png');
     $('#modal-img').jrumble();
     $('#modal-img').trigger('startRumble');
 
     intervalId = setInterval(function(){
-      var min = parseInt(count / 60);
-      var sec = count % 60;
+      var min = parseInt(rcount / 60);
+      var sec = rcount % 60;
       var dispStr = ("0"+min).slice(-2) +"：" + ("0"+sec).slice(-2);
       $('#modal-message').text(dispStr);
-      count--;
-      if ( count < 0 ){
+      rcount--;
+      if ( rcount < 0 ){
         clearInterval( intervalId );
         insertTask();
       }
@@ -75,17 +78,22 @@ var timer = {
 
 $(function() {
 
-  $('#modal-example').on('show.bs.modal', function(event) {
-//    timer.count = 1500; //25min
-    timer.start(15)
-//    timer.count = 300; //5min
-//    timer.start()
-//    start();
+  $('#modal-timer').on('show.bs.modal', function(event) {
+    var button = $(event.relatedTarget);
+    var pomodoro = button.data('pomodoro');
+    var shortbreak = button.data('shortbreak');
+    timer.start(pomodoro, shortbreak);
   });
 
-  $('#modal-example').on('hide.bs.modal', function(event) {
-      clearInterval( intervalId );
+  $('#modal-timer').on('hide.bs.modal', function(event) {
+    clearInterval( intervalId );
   });
+
+  $('#modal-options').on('hide.bs.modal', function(event) {
+    location.reload(true);
+  });
+
+
 
 });
 
@@ -140,6 +148,20 @@ function onSignIn2(googleUser){
   input.setAttribute('value',idtoken);
   form.appendChild(input);
   form.submit();
+}
+
+function saveOptions() {
+  console.log("saveOptions called");
+  var pomodoro = document.getElementById("pomodoro").value;
+  var shortbreak = document.getElementById("shortbreak").value;
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', 'http://app.atwata.com/cherry-tomato/saveoptions');
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhr.onload = function() {
+    console.log('save options ' + xhr.responseText);
+//    window.location.href = "http://app.atwata.com/cherry-tomato/";
+  };
+  xhr.send('pomodoro=' + pomodoro + '&shortbreak=' + shortbreak);
 }
 
 

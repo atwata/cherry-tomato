@@ -41,8 +41,10 @@ router.get('/', function(req, res, next) {
 
   console.log(req.session);
 
+  var options = {'pomodoro' : 25, 'shortbreak' : 5};
+
   if(!req.session.user){
-    res.render('index', { title: 'cherry tomato', content: [], contents: [], user: null });
+    res.render('index', { title: 'cherry tomato', content: [], contents: [], user: null, options: options });
     return;
   }
 
@@ -67,6 +69,14 @@ router.get('/', function(req, res, next) {
 
   // Connect using MongoClient
   MongoClient.connect(url, function(err, db) {
+    var colopt = db.collection('option');
+    colopt.find({iss: user.iss, userid: user.id}).toArray(function(err, optionResult){
+    if(optionResult.length > 0){
+      options = optionResult[0];
+    }
+    console.log("options");
+    console.log(options);
+
     var col = db.collection('sample');
     col.find({iss: user.iss, userid: user.id, date:{$gte: moment().subtract(7,'days').toDate()}}).sort({'date':-1}).toArray(function(err, items){
       // 日付をキーにしたitemの配列
@@ -88,8 +98,9 @@ router.get('/', function(req, res, next) {
         }
       }
 
-      res.render('index', { title: 'cherry tomato', content: JSON.stringify(items), contents: contents, user: user });
+      res.render('index', { title: 'cherry tomato', content: JSON.stringify(items), contents: contents, user: user, options: options });
       db.close();
+    });
     });
   });
   
@@ -192,6 +203,34 @@ router.post('/tokensignin', function(req, res, next) {
 router.get('/signout', function(req, res, next) {
   req.session.user = null;
   res.render('signout', {});
+});
+
+router.post('/saveoptions', function(req, res, next) {
+
+  if(!req.session.user){
+    console.log('returned /saveoptions.  not logged in');
+    res.redirect("./");
+    return;
+  }
+
+  var userid = req.session.user.id;
+  var useriss = req.session.user.iss;
+  var pomodoro = req.body.pomodoro;
+  var shortbreak = req.body.shortbreak;
+
+  var MongoClient = require('mongodb').MongoClient,
+    test = require('assert');
+
+  // Connection url
+  var url = 'mongodb://localhost:27017/sample';
+
+  // Connect using MongoClient
+  MongoClient.connect(url, function(err, db) {
+    var col = db.collection('option');
+    col.update({'iss' : useriss, 'userid' : userid}, {'iss' : useriss, 'userid' : userid, "pomodoro" : pomodoro, "shortbreak" : shortbreak }, {'upsert':true});
+    console.log("saveoptions update called");
+  });
+  res.json({ message: 'option updated!' });
 });
 
 
