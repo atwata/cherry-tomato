@@ -93,6 +93,11 @@ $(function() {
     location.reload(true);
   });
 
+  $("#task").keydown(function() {
+    if( event.keyCode == 13 ) {
+      $("#modal-button").click();
+    }
+  });
 
 
 });
