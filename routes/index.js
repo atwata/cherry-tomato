@@ -41,7 +41,7 @@ router.get('/', function(req, res, next) {
 
   console.log(req.session);
 
-  var options = {'pomodoro' : 25, 'shortbreak' : 5};
+  var options = {'pomodoro' : 25, 'shortbreak' : 5, 'longbreak' : 15, 'perround' : 4};
 
   if(!req.session.user){
     res.render('index', { title: 'cherry tomato', content: [], contents: [], user: null, options: options });
@@ -96,6 +96,11 @@ router.get('/', function(req, res, next) {
         if(items != null){
           contents[i].items = temp[contents[i].date];
         }
+      }
+      // short/long switch
+      options.breaktime = options.shortbreak;
+      if(contents[0].items.length % options.perround == (options.perround - 1)){
+        options.breaktime = options.longbreak;
       }
 
       res.render('index', { title: 'cherry tomato', content: JSON.stringify(items), contents: contents, user: user, options: options });
@@ -217,6 +222,8 @@ router.post('/saveoptions', function(req, res, next) {
   var useriss = req.session.user.iss;
   var pomodoro = req.body.pomodoro;
   var shortbreak = req.body.shortbreak;
+  var longbreak = req.body.longbreak;
+  var perround = req.body.perround;
 
   var MongoClient = require('mongodb').MongoClient,
     test = require('assert');
@@ -227,7 +234,11 @@ router.post('/saveoptions', function(req, res, next) {
   // Connect using MongoClient
   MongoClient.connect(url, function(err, db) {
     var col = db.collection('option');
-    col.update({'iss' : useriss, 'userid' : userid}, {'iss' : useriss, 'userid' : userid, "pomodoro" : pomodoro, "shortbreak" : shortbreak }, {'upsert':true});
+    col.update(
+      {'iss' : useriss, 'userid' : userid}, 
+      {'iss' : useriss, 'userid' : userid, "pomodoro" : pomodoro, "shortbreak" : shortbreak, "longbreak" : longbreak , "perround" : perround}, 
+      {'upsert':true}
+    );
     console.log("saveoptions update called");
   });
   res.json({ message: 'option updated!' });

@@ -37,7 +37,7 @@ block content
       div.col-xs-6.col-xs-offset-2
         input#task(type='text', class='form-control')
       div.col-xs-2
-        button(id='modal-button' class='btn btn-primary btn-sm' data-toggle="modal" data-target="#modal-timer" data-pomodoro="#{options.pomodoro}" data-shortbreak="#{options.shortbreak}") Start
+        button(id='modal-button' class='btn btn-primary btn-sm' data-toggle="modal" data-target="#modal-timer" data-pomodoro="#{options.pomodoro}" data-breaktime="#{options.breaktime}") Start
 
   if user
     div(id='tabs')
@@ -98,13 +98,21 @@ block content
         div(class='modal-body')
           form(class="form-horizontal")
             div(class="form-group")
-              label(for="pomodoro" class="col-sm-3 col-sm-offset-1 control-label") Pomodoro
+              label(for="pomodoro" class="col-sm-3 col-sm-offset-1 control-label") Pomodoro Duration
               div(class="col-sm-5")
                 input(id="pomodoro" class="form-control" value="#{options.pomodoro}")
             div(class="form-group")
               label(for="short-break" class="col-sm-3 col-sm-offset-1 control-label") Short Break
               div(class="col-sm-5")
                 input(id="shortbreak" class="form-control" value="#{options.shortbreak}")
+            div(class="form-group")
+              label(for="long-break" class="col-sm-3 col-sm-offset-1 control-label") Long Break
+              div(class="col-sm-5")
+                input(id="longbreak" class="form-control" value="#{options.longbreak}")
+            div(class="form-group")
+              label(for="perround" class="col-sm-3 col-sm-offset-1 control-label") Pomodoro per Round
+              div(class="col-sm-5")
+                input(id="perround" class="form-control" value="#{options.perround}")
 
         div(class='modal-footer')
           button(type='button' class="btn btn-default" data-dismiss="modal") close

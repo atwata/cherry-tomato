@@ -81,8 +81,8 @@ $(function() {
   $('#modal-timer').on('show.bs.modal', function(event) {
     var button = $(event.relatedTarget);
     var pomodoro = button.data('pomodoro');
-    var shortbreak = button.data('shortbreak');
-    timer.start(pomodoro, shortbreak);
+    var breaktime = button.data('breaktime');
+    timer.start(pomodoro, breaktime);
   });
 
   $('#modal-timer').on('hide.bs.modal', function(event) {
@@ -159,6 +159,8 @@ function saveOptions() {
   console.log("saveOptions called");
   var pomodoro = document.getElementById("pomodoro").value;
   var shortbreak = document.getElementById("shortbreak").value;
+  var longbreak = document.getElementById("longbreak").value;
+  var perround = document.getElementById("perround").value;
   var xhr = new XMLHttpRequest();
   xhr.open('POST', 'http://app.atwata.com/cherry-tomato/saveoptions');
   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -166,7 +168,7 @@ function saveOptions() {
     console.log('save options ' + xhr.responseText);
 //    window.location.href = "http://app.atwata.com/cherry-tomato/";
   };
-  xhr.send('pomodoro=' + pomodoro + '&shortbreak=' + shortbreak);
+  xhr.send('pomodoro=' + pomodoro + '&shortbreak=' + shortbreak + '&longbreak=' + longbreak + '&perround=' + perround);
 }
 
 
