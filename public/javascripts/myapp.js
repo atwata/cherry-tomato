@@ -1,3 +1,20 @@
+// デスクトップ通知の表示
+function showNotification(){
+    var Notification = window.Notification || window.mozNotification || window.webkitNotification;
+ 
+    // Notificationの権限チェック
+    Notification.requestPermission(function (permission) {
+        console.log(permission);
+    });
+    var instance = new Notification(
+        "cherry tomato", 
+        {
+            body: "お疲れ様でした！\n作業終了の時間です！",
+            icon: "images/honoo_hi_fire.png"
+        }
+    );
+}
+
 function insertTask(){
   var form = document.createElement('form');
   form.setAttribute('action','add');
@@ -29,6 +46,7 @@ function deleteTask(id){
 }
 
 
+// timerオブジェクト
 var timer = {
   setTitle: function(title){
     $('#modal-timer-title').text(title);
@@ -50,8 +68,11 @@ var timer = {
       var dispStr = ("0"+min).slice(-2) +"：" + ("0"+sec).slice(-2);
       $('#modal-message').text(dispStr);
       scount--;
+      // 作業タイマー終了
       if ( scount < 0 ){
+        // timer終了、通知、休憩timer開始
         clearInterval( intervalId );
+        showNotification();
         timer.rest(rcount);
       }
     },1000);
