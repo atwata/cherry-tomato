@@ -59,6 +59,7 @@ var timer = {
     var rcount = rmin * 60;
     console.log(scount);
     var task = document.getElementById("task");
+
     timer.setTitle(task.value);
     timer.setImg('images/honoo_hi_fire.png');
 
@@ -67,6 +68,7 @@ var timer = {
       var sec = scount % 60;
       var dispStr = ("0"+min).slice(-2) +"：" + ("0"+sec).slice(-2);
       $('#modal-message').text(dispStr);
+      document.title = "(作業中) " + dispStr +  " cherry tomato";
       scount--;
       // 作業タイマー終了
       if ( scount < 0 ){
@@ -88,6 +90,7 @@ var timer = {
       var sec = rcount % 60;
       var dispStr = ("0"+min).slice(-2) +"：" + ("0"+sec).slice(-2);
       $('#modal-message').text(dispStr);
+      document.title = "(休憩中) " + dispStr +  " cherry tomato";
       rcount--;
       if ( rcount < 0 ){
         clearInterval( intervalId );
@@ -97,6 +100,7 @@ var timer = {
   }
 }
 
+// モーダル関連イベント
 $(function() {
 
   $('#modal-timer').on('show.bs.modal', function(event) {
@@ -108,6 +112,7 @@ $(function() {
 
   $('#modal-timer').on('hide.bs.modal', function(event) {
     clearInterval( intervalId );
+    document.title = "cherry tomato";
   });
 
   $('#modal-options').on('hide.bs.modal', function(event) {
