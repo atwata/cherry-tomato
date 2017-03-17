@@ -1,5 +1,5 @@
 // デスクトップ通知の表示
-function showNotification(){
+function showNotification(message, iconUrl){
     var Notification = window.Notification || window.mozNotification || window.webkitNotification;
  
     // Notificationの権限チェック
@@ -9,8 +9,8 @@ function showNotification(){
     var instance = new Notification(
         "cherry tomato", 
         {
-            body: "お疲れ様でした！\n作業終了の時間です！",
-            icon: "images/honoo_hi_fire.png"
+            body: message,
+            icon: iconUrl
         }
     );
 }
@@ -74,7 +74,7 @@ var timer = {
       if ( scount < 0 ){
         // timer終了、通知、休憩timer開始
         clearInterval( intervalId );
-        showNotification();
+        showNotification("お疲れ様でした！\n作業終了の時間です！", "images/drink_chabashira.png");
         timer.rest(rcount);
       }
     },1000);
@@ -95,6 +95,7 @@ var timer = {
       if ( rcount < 0 ){
         clearInterval( intervalId );
         insertTask();
+        showNotification("休憩が終了しました！", "images/honoo_hi_fire.png");
       }
     },1000);
   }
